@@ -40,7 +40,7 @@ Each app is unique, but here are some common features:
 2. **Install dependencies**:
    You’ll need Python (preferably 3.x) and a few libraries. You can install them via:
    ```bash
-   pip install -r requirements.txt
+   pip install comtypes-client ttkbootstrap pandas openpyxl fpdf python-docx pywin32 matplotlib seaborn pillow pytesseract pymupdf pdf2docx pdf2image tabula-py
    ```
 
 3. **Run the app**: 
