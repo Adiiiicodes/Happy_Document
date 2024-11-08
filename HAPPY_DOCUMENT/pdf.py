@@ -193,13 +193,13 @@ class PDFUtilityGUI:
         merge_window.title("Select Order of Files")
         merge_window.geometry("800x600")
 
-        listbox = Listbox(merge_window, selectmode='multiple', height=100 , width=500)
+        listbox = Listbox(merge_window, selectmode='multiple', height=20, width=100)
         for file in self.selected_files:
             listbox.insert(tk.END, file)
         listbox.pack(pady=25)
 
-        merge_button = ttk.Button(merge_window, text="Merge Selected Order", command=lambda: self.merge_selected_order(listbox.get(listbox.curselection()), merge_window))
-        merge_button.pack(pady=20)
+        confirm_button = ttk.Button(merge_window, text="Confirm Order", command=lambda: self.merge_selected_order(listbox.get(0, tk.END), merge_window))
+        confirm_button.pack(pady=20)
 
     def merge_selected_order(self, selected_files, window):
         output_path = filedialog.asksaveasfilename(defaultextension=".pdf", filetypes=[("PDF Files", "*.pdf")])
