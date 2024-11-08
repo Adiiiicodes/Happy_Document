@@ -11,6 +11,7 @@ import pandas as pd
 from pdf2image import convert_from_path
 import tabula
 import time  # For simulating long operations (remove in production)
+import webbrowser 
 
 # Set the Tesseract executable path for Windows
 pytesseract.pytesseract.tesseract_cmd = r'C:\Users\HP\scoop\apps\tesseract\current\tesseract.exe'  # Update with your Tesseract path
