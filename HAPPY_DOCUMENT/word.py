@@ -7,6 +7,7 @@ import os
 from docx import Document
 import pandas as pd
 import time
+import webbrowser 
 
 # Function to extract text from a Word document (.docx and .doc)
 def extract_text_word(file_path):
