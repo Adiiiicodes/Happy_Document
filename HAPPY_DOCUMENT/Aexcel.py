@@ -9,6 +9,14 @@ import win32com.client as win32
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import seaborn as sns
+from tkinter import filedialog, messagebox, scrolledtext, Listbox, simpledialog
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+import webbrowser
+import tkinter as tk
+from tkinter import ttk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 class EnhancedExcelUtilityApp(tk.Tk):
     def __init__(self):
@@ -17,9 +25,17 @@ class EnhancedExcelUtilityApp(tk.Tk):
         self.geometry("1000x700")
         self.configure(bg='#2E2E2E')
         
-        # Configure modern styling
-        self.style = ttk.Style(self)
-        self.style.theme_use('clam')
+        # Initialize ttkbootstrap style
+        self.style = ttk.Style(theme="darkly")
+        
+        # Check and use a valid theme, e.g., 'darkly', 'flatly', 'superhero', 'pulse', etc.
+        available_themes = self.style.theme_names()  # List all available themes
+        print("Available themes:", available_themes)  # Check which themes are available
+        
+        # Set the theme if it exists, else use a fallback theme like 'superhero'
+        theme_name = 'superhero' if 'superhero' in available_themes else 'clam'  # Fallback to clam if superhero isn't available
+        self.style.theme_use(theme_name)
+        
         self.configure_styles()
         
         # Main container
@@ -28,18 +44,18 @@ class EnhancedExcelUtilityApp(tk.Tk):
         
         # File selection frame
         self.create_file_frame()
-        
+
         # Notebook for tabs
         self.notebook = ttk.Notebook(self.main_container)
         self.notebook.pack(fill='both', expand=True, pady=(10, 0))
-        
+
         # Initialize variables
         self.selected_file = ""
         self.df = None
-        
+
         # Create tabs
         self.create_tabs()
-        
+
         # Status bar
         self.status_var = tk.StringVar()
         self.status_bar = ttk.Label(self, textvariable=self.status_var, style='Status.TLabel')
@@ -52,32 +68,32 @@ class EnhancedExcelUtilityApp(tk.Tk):
         self.style.configure("TLabel", background='#2E2E2E', foreground='white', font=('Helvetica', 16))
         self.style.configure("Header.TLabel", font=('Helvetica', 16, 'bold'))
         self.style.configure("Status.TLabel", background='#2c2c2c', foreground='#00FF00', font=('Helvetica', 10))
-        
+
         # Button styling
         self.style.configure("TButton",
-                           font=('Helvetica', 12),
-                           padding=10,
-                           background='#4A4A4A',
-                           foreground='black')
+                             font=('Helvetica', 12),
+                             padding=10,
+                             background='#4A4A4A',
+                             foreground='black')
         self.style.map("TButton",
-                      background=[('active', '#5A5A5A')],
-                      foreground=[('active', 'white')])
-        
+                       background=[('active', '#5A5A5A')],
+                       foreground=[('active', 'white')])
+
         # Notebook styling
         self.style.configure("TNotebook", background='#2E2E2E', padding=5)
         self.style.configure("TNotebook.Tab", padding=[12, 4],
-                           font=('Helvetica', 12),
-                           background='#4A4A4A',
-                           foreground='black')
+                             font=('Helvetica', 12),
+                             background='#4A4A4A',
+                             foreground='black')
 
     def create_file_frame(self):
         file_frame = ttk.Frame(self.main_container)
         file_frame.pack(fill='x', pady=(0, 10))
-        
+
         ttk.Label(file_frame, text="Current File:", style='Header.TLabel').pack(side='left', padx=5)
         self.file_label = ttk.Label(file_frame, text="No file selected")
         self.file_label.pack(side='left', padx=5)
-        
+
         ttk.Button(file_frame, text="Browse", command=self.browse_file).pack(side='right', padx=5)
 
     def create_tabs(self):
@@ -89,11 +105,41 @@ class EnhancedExcelUtilityApp(tk.Tk):
             "Data Visualization": self.create_visualization_tab,
             "Convert to Word": self.create_word_tab
         }
-        
+
         for tab_name, tab_function in self.tabs.items():
             frame = ttk.Frame(self.notebook)
             self.notebook.add(frame, text=tab_name)
             tab_function(frame)
+
+        # Footer
+        self.footer_frame = ttk.Frame(self.master)
+        self.footer_frame.pack(side=BOTTOM, fill=X, pady=(10, 0))
+
+        footer_label = ttk.Label(self.footer_frame, text="Created By : ", font=("Helvetica", 12))
+        footer_label.pack(side=LEFT, padx=5)
+
+        link_label = ttk.Label(self.footer_frame, text="Aditya Nalawade", font=("Helvetica", 12, "underline"), foreground="#CBFC01")
+        link_label.pack(side=LEFT)
+
+        link_label2 = ttk.Label(self.footer_frame, text="GitHub", font=("Helvetica", 12, "underline"), foreground="#CBFC01")
+        link_label2.pack(side=LEFT, padx=5)
+        link_label2.bind("<Button-1>", self.open_link2)
+
+        link_label3 = ttk.Label(self.footer_frame, text="Mail", font=("Helvetica", 12, "underline"), foreground="#CBFC01")
+        link_label3.pack(side=LEFT, padx=5)
+        link_label3.bind("<Button-1>", self.open_link3)
+
+        link_label.bind("<Button-1>", self.open_link)
+
+    def open_link(self, event):
+        webbrowser.open("https://www.linkedin.com/in/aditya-nalawade-a4b081297?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app")
+
+    def open_link2(self, event):
+        webbrowser.open("https://github.com/Adiiiicodes")
+
+    def open_link3(self, event):
+        webbrowser.open("adityacodes8@gmail.com")
+
 
     def create_csv_tab(self, frame):
         ttk.Label(frame, text="Convert Excel to CSV", style='Header.TLabel').pack(pady=10)
